@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Locus Surverys Job Map</title>
 
-    <!-- Leaflet CSS file -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Leaflet JS file -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
 
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
         body {
@@ -33,47 +34,117 @@
         }
     </style>
 
+
 </head>
 
 <body>
     <div id="map"></div>
     <script>
-        var map = L.map('map').setView([
-            46.45236041353664, -63.302893192172775], 9);
+        var map = L.map("map").setView(
+            [46.45236041353664, -63.302893192172775],
+            9
+        );
 
-        /* Control panel to display map layers */
-        var controlLayers = L.control.layers(null, null, {
-            position: "topright",
-            collapsed: false
-        }).addTo(map);
+        var controlLayers = L.control
+            .layers(null, null, {
+                position: "topright",
+                collapsed: false
+            })
+            .addTo(map);
 
-        var OpenStreetMap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        controlLayers.addBaseLayer(OpenStreetMap, 'Basic');
+        var OpenStreetMap = L.tileLayer(
+            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom: 19,
+                attribution:
+                    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }
+        ).addTo(map);
+        controlLayers.addBaseLayer(OpenStreetMap, "Basic");
 
-        var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-            maxZoom: 17,
-            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+        var OpenTopoMap = L.tileLayer(
+            "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom: 17,
+                attribution:
+                    'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+            }
+        );
+        controlLayers.addBaseLayer(OpenTopoMap, "Topographical");
+
+        var Esri_WorldImagery = L.tileLayer(
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            {
+                attribution:
+                    "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+            }
+        );
+        controlLayers.addBaseLayer(Esri_WorldImagery, "Satellite");
+
+        // L.marker([46.43598747040306, -63.63084638684899]).addTo(map).bindPopup("Locus Surveys Headquarters");
+
+        // create 3 types of markers in 3 colors
+
+        var LeafIcon = L.Icon.extend({
+            options: {
+                iconSize: [25, 41],
+                iconAnchor: [10, 41],
+                popupAnchor: [2, -40]
+            }
         });
-        controlLayers.addBaseLayer(OpenTopoMap, 'Topographical');
 
-        var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        // Read markers data from data.csv
+        $.get('./data.csv', function (csvString) {
+            // Use PapaParse to convert string to array of objects
+            var data = Papa.parse(csvString, { header: true, dynamicTyping: true }).data;
+
+            var greenIcon = new LeafIcon({
+                iconUrl:
+                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png"
+            });
+            var yellowIcon = new LeafIcon({
+                iconUrl:
+                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png"
+            });
+            var blackIcon = new LeafIcon({
+                iconUrl:
+                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png"
+            });
+            var greyIcon = new LeafIcon({
+                iconUrl:
+                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png"
+            });
+            var redIcon = new LeafIcon({
+                iconUrl:
+                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png"
+            });
+            var blueIcon = new LeafIcon({
+                iconUrl:
+                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png"
+            });
+
+            // For each row in data, create a marker and add it to the map
+            // For each row, columns `Latitude`, `Longitude`, and `Title` are required
+            for (var i in data) {
+                var row = data[i];
+                const marker = L.marker([row.lat, row.long], {
+                    icon:
+                        row.result === "G"
+                            ? greenIcon
+                            : row.result === "B"
+                                ? blueIcon
+                                : row.result === "Y"
+                                    ? yellowIcon
+                                    : row.result === "R"
+                                        ? redIcon
+                                        : greyIcon
+                })
+                    .addTo(map)
+                    .bindPopup(row.title)
+            }
         });
-        controlLayers.addBaseLayer(Esri_WorldImagery, 'Satellite');
-
-        function centreMap(e) {
-            map.panTo(e.latlng);
-        }
-
-        L.marker([46.43598747040306, -63.63084638684899]).addTo(map).bindPopup("Locus Surveys Headquarters");
-
-        // map.on('click', centreMap);
-
     </script>
-
+    
 </body>
 
 </html>

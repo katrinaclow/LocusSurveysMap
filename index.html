@@ -19,6 +19,8 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script type="text/javascript" src="script.js"></script>
+
     <style>
         body {
             margin: 0;
@@ -40,18 +42,14 @@
 <body>
     <div id="map"></div>
     <script>
-        var map = L.map("map").setView(
-            [46.45236041353664, -63.302893192172775],
-            9
-        );
 
-        var controlLayers = L.control
-            .layers(null, null, {
-                position: "topright",
-                collapsed: false
-            })
-            .addTo(map);
+        // set page opening map view to location
+        var map = L.map("map").setView([44.45236041353664, -62.302893192172775], 9);
 
+        // initialize control layers
+        var controlLayers = L.control.layers(null, null, { position: "topright", collapsed: false }).addTo(map);
+
+        // base map options   
         var OpenStreetMap = L.tileLayer(
             "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
             {
@@ -81,10 +79,7 @@
         );
         controlLayers.addBaseLayer(Esri_WorldImagery, "Satellite");
 
-        // L.marker([46.43598747040306, -63.63084638684899]).addTo(map).bindPopup("Locus Surveys Headquarters");
-
-        // create 3 types of markers in 3 colors
-
+        // defines marker icon parameters
         var LeafIcon = L.Icon.extend({
             options: {
                 iconSize: [25, 41],
@@ -93,41 +88,28 @@
             }
         });
 
-        // Read markers data from data.csv
-        $.get('./data.csv', function (csvString) {
+        // creates different marker icons
+        function createLeafIcon(iconUrl) {
+            return new LeafIcon({ iconUrl });
+        }
+
+        // assigns marker icons
+        var greenIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png");
+        yellowIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png");
+        redIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png");
+        blueIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png");
+        greyIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png");
+        blackIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png");
+
+        // Read markers and popup data from CSV file
+        $.get('testdata.csv', function (csvString) {
             // Use PapaParse to convert string to array of objects
             var data = Papa.parse(csvString, { header: true, dynamicTyping: true }).data;
 
-            var greenIcon = new LeafIcon({
-                iconUrl:
-                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png"
-            });
-            var yellowIcon = new LeafIcon({
-                iconUrl:
-                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png"
-            });
-            var blackIcon = new LeafIcon({
-                iconUrl:
-                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png"
-            });
-            var greyIcon = new LeafIcon({
-                iconUrl:
-                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png"
-            });
-            var redIcon = new LeafIcon({
-                iconUrl:
-                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png"
-            });
-            var blueIcon = new LeafIcon({
-                iconUrl:
-                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png"
-            });
-
-            // For each row in data, create a marker and add it to the map
-            // For each row, columns `Latitude`, `Longitude`, and `Title` are required
+            // crerates a marker for each row item and adds it to the map
             for (var i in data) {
                 var row = data[i];
-                const marker = L.marker([row.lat, row.long], {
+                var marker = L.marker([row.latitude, row.longitude], {
                     icon:
                         row.result === "G"
                             ? greenIcon
@@ -138,13 +120,11 @@
                                     : row.result === "R"
                                         ? redIcon
                                         : greyIcon
-                })
-                    .addTo(map)
-                    .bindPopup(row.title)
+                }).bindPopup("Job ID: " + row.jobid + " Address: " + row.address + " Date Created: " + row.initialized).addTo(map)
             }
         });
     </script>
-    
+
 </body>
 
 </html>

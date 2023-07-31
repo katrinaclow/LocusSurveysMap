@@ -97,7 +97,7 @@ $.get('jobdata.csv', function (csvString) {
         if (row["Civic"] === "undefined") {
             civic = "";
         } else {
-            row["Civic"];
+            civic = row["Civic"];
         }
         var pid = row["PID"];
         var longitude = row["Longitude"];

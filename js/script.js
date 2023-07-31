@@ -123,6 +123,7 @@ $.get('jobdata.csv', function (csvString) {
         }).bindPopup(
             "Job ID: " + jobid +
             "<br>PID: " + pid +
+            "<br>Client: " + client +
             "<br>Address: " + civic + " " + road + ", " + location +
             "<br>Date Created: " + created +
             "<br><br>Notes:",

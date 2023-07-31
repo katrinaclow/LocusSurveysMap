@@ -93,7 +93,12 @@ $.get('jobdata.csv', function (csvString) {
         var client = row["Client"];
         var location = row["Location"];
         var road = row["Road"];
-        var civic = row["Civic"];
+        var civic;
+        if (row["Civic"] === "undefined") {
+            civic = "";
+        } else {
+            row["Civic"];
+        }
         var pid = row["PID"];
         var longitude = row["Longitude"];
         var latitude = row["Latitude"];

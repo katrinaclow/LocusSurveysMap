@@ -57,9 +57,8 @@ function createLeafIcon(iconUrl) {
     return new LeafIcon({ iconUrl });
 }
 
+var markerClusterGroup = L.markerClusterGroup();
 
-// number of markers
-var markerCount = 0;
 // assigns marker icons
 var redIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png");
 orangeIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png");
@@ -73,18 +72,14 @@ blackIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-co
 // Read markers and popup data from CSV file
 $.get('jobdata.csv', function (csvString) {
     // Use PapaParse to convert string to array of objects
-    var parsedData = Papa.parse(csvString, { 
-        header: true, 
-        dynamicTyping: true, 
-        skipEmptyLines: true, 
-        // transform: function (value, header) {
-        //     if (!value.trim()) {
-        //         return Papa.RETURN_EMPTY;
-        //     }
-        //     return value;
-        // },
+    var parsedData = Papa.parse(csvString, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
     });
     var data = parsedData.data;
+
+
 
     // crerates a marker for each row item and adds it to the map
     for (var i in data) {
@@ -111,9 +106,9 @@ $.get('jobdata.csv', function (csvString) {
         if (complete === "Y") {
             icon = blueIcon;
         } else if (markersSet === "Y" || markersSet === "NA") {
-            icon = yellowIcon;
+            icon = redIcon;
         } else if (initialFieldwork === "Y") {
-            icon = orangeIcon;
+            icon = redIcon;
         } else {
             icon = redIcon;
         }
@@ -125,12 +120,15 @@ $.get('jobdata.csv', function (csvString) {
             "<br>PID: " + pid +
             "<br>Client: " + client +
             "<br>Address: " + civic + " " + road + ", " + location +
-            "<br>Date Created: " + created +
-            "<br><br>Notes:",
-            { removable: true, editable: true })
+            "<br>Date Created: " + created)
+            // "<br><br>Notes:")
+            // { removable: true, editable: true })
             .addTo(map)
     }
 });
+
+
+
 
 /*
 || markersSet === "NA"

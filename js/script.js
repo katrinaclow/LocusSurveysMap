@@ -77,12 +77,12 @@ $.get('jobdata.csv', function (csvString) {
         header: true, 
         dynamicTyping: true, 
         skipEmptyLines: true, 
-        transform: function (value, header) {
-            if (!value.trim()) {
-                return Papa.RETURN_EMPTY;
-            }
-            return value;
-        },
+        // transform: function (value, header) {
+        //     if (!value.trim()) {
+        //         return Papa.RETURN_EMPTY;
+        //     }
+        //     return value;
+        // },
     });
     var data = parsedData.data;
 
@@ -94,8 +94,8 @@ $.get('jobdata.csv', function (csvString) {
         var location = row["Location"];
         var road = row["Road"];
         var civic;
-        if (row["Civic"] === "undefined") {
-            civic = "";
+        if (row["Civic"] === null) {
+            civic = " ";
         } else {
             civic = row["Civic"];
         }
@@ -122,6 +122,7 @@ $.get('jobdata.csv', function (csvString) {
             icon
         }).bindPopup(
             "Job ID: " + jobid +
+            "<br>PID: " + pid +
             "<br>Address: " + civic + " " + road + ", " + location +
             "<br>Date Created: " + created +
             "<br><br>Notes:",

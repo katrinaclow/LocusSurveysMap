@@ -19,111 +19,19 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script type="text/javascript" src="script.js"></script>
+    <!-- Leaflet Popup Modifier -->
+    <script src="js/popupMod.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="css/popupMod.css">
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
 
-        #map {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-        }
-    </style>
-
+    <!-- Personal style and script file links -->
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" type="text/javascript" defer></script>
 
 </head>
 
 <body>
     <div id="map"></div>
-    <script>
-
-        // set page opening map view to location
-        var map = L.map("map").setView([44.45236041353664, -62.302893192172775], 9);
-
-        // initialize control layers
-        var controlLayers = L.control.layers(null, null, { position: "topright", collapsed: false }).addTo(map);
-
-        // base map options   
-        var OpenStreetMap = L.tileLayer(
-            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-            {
-                maxZoom: 19,
-                attribution:
-                    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }
-        ).addTo(map);
-        controlLayers.addBaseLayer(OpenStreetMap, "Basic");
-
-        var OpenTopoMap = L.tileLayer(
-            "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-            {
-                maxZoom: 17,
-                attribution:
-                    'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-            }
-        );
-        controlLayers.addBaseLayer(OpenTopoMap, "Topographical");
-
-        var Esri_WorldImagery = L.tileLayer(
-            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-            {
-                attribution:
-                    "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
-            }
-        );
-        controlLayers.addBaseLayer(Esri_WorldImagery, "Satellite");
-
-        // defines marker icon parameters
-        var LeafIcon = L.Icon.extend({
-            options: {
-                iconSize: [25, 41],
-                iconAnchor: [10, 41],
-                popupAnchor: [2, -40]
-            }
-        });
-
-        // creates different marker icons
-        function createLeafIcon(iconUrl) {
-            return new LeafIcon({ iconUrl });
-        }
-
-        // assigns marker icons
-        var greenIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png");
-        yellowIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png");
-        redIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png");
-        blueIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png");
-        greyIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png");
-        blackIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png");
-
-        // Read markers and popup data from CSV file
-        $.get('testdata.csv', function (csvString) {
-            // Use PapaParse to convert string to array of objects
-            var data = Papa.parse(csvString, { header: true, dynamicTyping: true }).data;
-
-            // crerates a marker for each row item and adds it to the map
-            for (var i in data) {
-                var row = data[i];
-                var marker = L.marker([row.latitude, row.longitude], {
-                    icon:
-                        row.result === "G"
-                            ? greenIcon
-                            : row.result === "B"
-                                ? blueIcon
-                                : row.result === "Y"
-                                    ? yellowIcon
-                                    : row.result === "R"
-                                        ? redIcon
-                                        : greyIcon
-                }).bindPopup("Job ID: " + row.jobid + " Address: " + row.address + " Date Created: " + row.initialized).addTo(map)
-            }
-        });
-    </script>
 
 </body>
 

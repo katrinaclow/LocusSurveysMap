@@ -70,7 +70,7 @@ greyIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-col
 blackIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png");
 
 // Read markers and popup data from CSV file
-$.get('G:\My Drive\jobdata.csv', function (csvString) {
+$.get('..\My Drive\jobdata.csv', function (csvString) {
     // Use PapaParse to convert string to array of objects
     var parsedData = Papa.parse(csvString, {
         header: true,

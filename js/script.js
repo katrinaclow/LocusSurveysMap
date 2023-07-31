@@ -21,7 +21,7 @@ var arcGIS = L.tileLayer(
         maxZoom: 18,
         attribution: 'Tiles &copy; Esri',
     }
-).addTo(map);
+);
 controlLayers.addBaseLayer(arcGIS, "ArcGIS");
 
 var OpenTopoMap = L.tileLayer(
@@ -83,22 +83,27 @@ $.get('jobdata.csv', function (csvString) {
         var location = row["Location"];
         var road = row["Road"];
         var civic = row["Civic"];
-        var pid = ["PID"];
+        var pid = row["PID"];
         var longitude = row["Longitude"];
         var latitude = row["Latitude"];
-        var created = ["Date Created"];
-        var initialFieldwork = ["Initial Fieldwork"];
-        var markersSet = ["Survey Markers Set"];
-        var complete = ["Final Plan Submitted"];
+        var created = row["Date Created"];
+        var initialFieldwork = row["Initial Fieldwork Completed"];
+        var markersSet = row["Survey Markers Set"];
+        var complete = row["Final Plan Submitted"];
+
+        var icon;
+        if (complete === "Y") {
+            icon = blueIcon;
+        } else if (markersSet === "Y" || markersSet === "NA") {
+            icon = yellowIcon;
+        } else if (initialFieldwork === "Y") {
+            icon = orangeIcon;
+        } else {
+            icon = redIcon;
+        }
+
         var marker = L.marker([latitude, longitude], {
-            icon:
-                initialFieldwork === "Y"
-                    ? orangeIcon
-                    : markersSet === "Y" || markersSet === "NA"
-                        ? yellowIcon
-                        : complete === "Y"
-                            ? blueIcon
-                            : redIcon
+            icon
         }).bindPopup(
             "Job ID: " + jobid +
             "<br>Address: " + civic + " " + road + ", " + location +
@@ -110,6 +115,7 @@ $.get('jobdata.csv', function (csvString) {
 });
 
 /*
+|| markersSet === "NA"
 row.
 row.
 row.

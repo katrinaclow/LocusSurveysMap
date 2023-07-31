@@ -90,7 +90,7 @@ $.get('jobdata.csv', function (csvString) {
         var initialFieldwork = ["Initial Fieldwork"];
         var markersSet = ["Survey Markers Set"];
         var complete = ["Final Plan Submitted"];
-        var marker = L.marker([row.latitude, row.longitude], {
+        var marker = L.marker([latitude, longitude], {
             icon:
                 initialFieldwork === "Y"
                     ? orangeIcon

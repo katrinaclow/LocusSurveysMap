@@ -79,8 +79,6 @@ $.get('G:\My Drive\jobdata.csv', function (csvString) {
     });
     var data = parsedData.data;
 
-
-
     // crerates a marker for each row item and adds it to the map
     for (var i in data) {
         var row = data[i];
@@ -121,37 +119,8 @@ $.get('G:\My Drive\jobdata.csv', function (csvString) {
             "<br>Client: " + client +
             "<br>Address: " + civic + " " + road + ", " + location +
             "<br>Date Created: " + created)
-            // "<br><br>Notes:")
-            // { removable: true, editable: true })
             .addTo(map)
     }
 });
 
 
-
-
-/*
-|| markersSet === "NA"
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-row.
-*/

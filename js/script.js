@@ -73,7 +73,18 @@ blackIcon = createLeafIcon("https://raw.githubusercontent.com/pointhi/leaflet-co
 // Read markers and popup data from CSV file
 $.get('jobdata.csv', function (csvString) {
     // Use PapaParse to convert string to array of objects
-    var data = Papa.parse(csvString, { header: true, dynamicTyping: true }).data;
+    var parsedData = Papa.parse(csvString, { 
+        header: true, 
+        dynamicTyping: true, 
+        skipEmptyLines: true, 
+        transform: function (value, header) {
+            if (!value.trim()) {
+                return Papa.RETURN_EMPTY;
+            }
+            return value;
+        },
+    });
+    var data = parsedData.data;
 
     // crerates a marker for each row item and adds it to the map
     for (var i in data) {
